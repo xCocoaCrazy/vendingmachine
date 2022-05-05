@@ -3,28 +3,34 @@ package com.example.vending_machine;
 public class Item {
     private String name;
     private int amount;
-    private double price;
+    private Double price;
 
-    public Item(String name, int amount, double price) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
         this.amount = amount;
-        this.price = price;
     }
 
-    private boolean getItem() {
-        if(amount > 0) {
-            amount--;
-            return true;
-        }
-        return false;
-    }
-
-    private double getPrice() {
+    public Double getPrice() {
         return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
     public String toString() {
-        return name;
+        return name + ", amount = " + amount + ", price = $" + price;
     }
 }

@@ -65,14 +65,6 @@ class JsonTest {
     }
 
     @Test
-    void fromJson() throws IOException {
-        JsonNode node = Json.parse(testData);
-        TestPOJO pojo = Json.fromJson(node, TestPOJO.class);
-
-        assertEquals("CoderFromScratch", pojo.getTitle());
-    }
-
-    @Test
     void jsonScenario() throws IOException {
         JsonNode node = Json.parse(vendingMachineTestData);
         VendingMachinePOJO pojo = Json.fromJson(node, VendingMachinePOJO.class);
@@ -80,5 +72,11 @@ class JsonTest {
         System.out.println("config: " + pojo.getConfig().getRows() + "," + pojo.getConfig().getColumns());
         pojo.getItems().stream()
                 .forEach(e -> System.out.println(e));
+    }
+
+    @Test
+    void parseString() {
+        vendingMachineTestData = vendingMachineTestData.replace("$", "");
+        System.out.println(vendingMachineTestData);
     }
 }

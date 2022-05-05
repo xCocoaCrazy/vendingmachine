@@ -1,5 +1,12 @@
 package com.example.vending_machine;
 
+import com.example.json.Json;
+import com.example.pojos.VendingMachinePOJO;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,26 +15,33 @@ public class VendingMachine {
     private int columns;
     private List<List<Item>> items = new ArrayList<List<Item>>();
 
-    public VendingMachine(int rows, int columns) {
-        this.rows = rows;
-        this.columns = columns;
-        for(int i = 0; i < this.rows; i++) {
-            items.add(new ArrayList<>());
-        }
-    }
+    public VendingMachine(String fileName) {
+        VendingMachinePOJO pojo;
+        try {
 
-    public VendingMachine(int rows, int columns, ArrayList<Item> toBeAdded) {
-        this.rows = rows;
-        this.columns = columns;
-        if(toBeAdded.size() > rows * columns) {
-            throw new IndexOutOfBoundsException("There aren't enought slots in the Vending Machine for all the itmes.");
+            pojo = Json.fromJson(Json.parse(Files.readString(Paths.get(fileName), StandardCharsets.US_ASCII).replace("$", "")), VendingMachinePOJO.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        int indexOfToBeAddedArray = 0;
+        rows = pojo.getConfig().getRows();
+        columns = pojo.getConfig().getColumns();
+
+        if(pojo.getItems().size() > rows * columns) {
+            throw new IndexOutOfBoundsException("There are more items than slots!");
+        }
+
+        int indexOfItemsFromPojo = 0;
         for(int i = 0; i < this.rows; i++) {
+            if(indexOfItemsFromPojo == pojo.getItems().size()) {
+                break;
+            }
             items.add(new ArrayList<>());
             for(int j = 0; j < this.columns; j++) {
-                items.get(i).add(toBeAdded.get(indexOfToBeAddedArray));
-                indexOfToBeAddedArray++;
+                items.get(i).add(pojo.getItems().get(indexOfItemsFromPojo));
+                indexOfItemsFromPojo++;
+                if(indexOfItemsFromPojo == pojo.getItems().size()) {
+                    break;
+                }
             }
         }
     }
