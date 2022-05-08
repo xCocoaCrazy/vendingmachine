@@ -1,0 +1,19 @@
+{
+  "items": [{
+    "name": "Snickers",
+    "amount": 10,
+    "price": "$1.55"
+  }, {
+    "name": "Nutrageous",
+    "amount": 4,
+    "price": "$1.10"
+  }, {
+    "name": "Oreo",
+    "amount": 10,
+    "price": "$1.65"
+  }, {
+    "name": "Nefis",
+    "amount": 6,
+    "price": "$1.05"
+  }]
+}

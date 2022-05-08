@@ -1,5 +1,7 @@
 package com.example.vending_machine;
 
+import java.util.Objects;
+
 public class Item {
     private String name;
     private int amount;
@@ -32,5 +34,18 @@ public class Item {
     @Override
     public String toString() {
         return name + ", amount = " + amount + ", price = $" + price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return this.getName().equals(item.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name) + 67;
     }
 }
