@@ -33,7 +33,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return name + ", amount = " + amount + ", price = $" + price;
+        return name + ", " + amount + " pcs, $" + price;
     }
 
     @Override
