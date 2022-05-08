@@ -182,20 +182,13 @@ public class VendingMachine {
         char c = 65;
         int numberOfElements = getNumberOfItems();
         for(int i = 0; i < rows; i++) {
-            if(i == 0) {
-                System.out.print(" ");
-                for(int k = 1; k < columns + 1; k++) {
-                    System.out.print("   " + k);
-                }
-                System.out.println();
-            }
             System.out.print((char)(c + i) + " ");
             for(int j = 0; j < columns; j++) {
                 if(numberOfElements > 0) {
-                    System.out.print( " | " + items.get(i).get(j));
+                    System.out.print( " | (" + (j + 1) % 9 + ")" + items.get(i).get(j));
                     numberOfElements--;
                 } else {
-                    System.out.print(" | Empty");
+                    System.out.print(" | (" + (j + 1) % 9 + ")" + "Empty");
                 }
             }
             System.out.println();
