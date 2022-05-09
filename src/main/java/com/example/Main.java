@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws IOException {
         VendingMachine vm = new VendingMachine("FileResources/input.json");
-        System.out.println(vm.addOrUpdateItems("FileResources/updateOrAdd.json"));
+        //System.out.println(vm.addOrUpdateItems("FileResources/updateOrAdd.json"));
         /*
         Item item = new Item();
         item.setName("Snickers");;
@@ -27,6 +27,7 @@ public class Main {
         }
         System.out.println(pojo.getItems().contains(item));
         */
-        vm.showItems();
+        vm.startVendingMachine();
+        //System.out.println(Character.isAlphabetic(1 + 65));
     }
 }

@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class VendingMachine {
     private VendingMachinePOJO pojoVendingMachine; //Used to parse the data from a .json to the VendingMachine object
@@ -164,25 +165,12 @@ public class VendingMachine {
         return list;
     }
 
+    //Method to show items from the vending machine
     public void showItems() {
-        /*
-        items.stream()
-                .forEach(row -> {
-                    char c = '@';
-                    for(int i = 0; i < columns, i++) {
-
-                        System.out.println(c + i);
-                    }
-                    row.stream()
-                            .forEach(item -> System.out.print(item + " "));
-                    System.out.println();
-                });
-        */
-
         char c = 65;
         int numberOfElements = getNumberOfItems();
         for(int i = 0; i < rows; i++) {
-            System.out.print((char)(c + i) + " ");
+            System.out.print((char)(c + i));
             for(int j = 0; j < columns; j++) {
                 if(numberOfElements > 0) {
                     System.out.print( " | (" + (j + 1) % 9 + ")" + items.get(i).get(j));
@@ -192,6 +180,89 @@ public class VendingMachine {
                 }
             }
             System.out.println();
+        }
+    }
+
+    private int[] getPositionOfItemFromString(String position) {
+        char[] pos = position.toCharArray();
+        //Gets the position of the item for row by transforming the Char to the int
+        int chosenRow = pos[0] - 65;
+        int chosenColumn = 0;
+        int multiplyer = 1;
+        for(int i = pos.length - 1; i > 0; i--) {
+            chosenColumn += Character.getNumericValue(pos[i]) * multiplyer;
+            multiplyer *= 10;
+        }
+        //The final value in int for chosenColumn for the item.
+        chosenColumn--;
+        int positions[] = new int[2];
+        positions[0] = chosenRow;
+        positions[1] = chosenColumn;
+        return positions;
+    }
+
+    //Method to pick the item from Vending Machine.
+    protected boolean checkIfItemIsValid(String position) {
+        int chosenRow = getPositionOfItemFromString(position)[0];
+        int chosenColumn = getPositionOfItemFromString(position)[1];
+
+        //Checking if the entered data by the user is valid.
+        if(chosenRow >= rows) {
+            System.out.println("The row is invalid!");
+            return false;
+        } else if(chosenColumn >= columns) {
+            System.out.println("The column is invalid!");
+            return false;
+        } else if (chosenRow * 8 + chosenColumn > getNumberOfItems()) {
+            System.out.println("The cell has no item!");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean proceedPayment(String position) {
+        int chosenRow = getPositionOfItemFromString(position)[0];
+        int chosenColumn = getPositionOfItemFromString(position)[1];
+
+        double amountLeftToPay = items.get(chosenRow).get(chosenColumn).getPrice();
+        System.out.println("Attention! The Vending Machine does not return change!");
+        while(amountLeftToPay > 0) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("\nAmount left to enter: " + amountLeftToPay + "\n");
+            System.out.print("Insert the money: ");
+            double amount = scanner.nextDouble();
+            amountLeftToPay -= amount;
+        }
+        return true;
+    }
+
+    protected boolean giveItemToUser(String position) {
+        int chosenRow = getPositionOfItemFromString(position)[0];
+        int chosenColumn = getPositionOfItemFromString(position)[1];
+
+        items.get(chosenRow).get(chosenColumn).setAmount(items.get(chosenRow).get(chosenColumn).getAmount() - 1);
+        return true;
+    }
+
+    public void startVendingMachine() {
+        System.out.println();
+        showItems();
+        String position;
+        while(true) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("\nEnter the item you want to get (example for writing: A1) :");
+            position = scanner.next();
+            if(!Character.isAlphabetic(getPositionOfItemFromString(position)[0] + 65)) {
+                System.out.println("\nInvalid form of selecting item! (example for writing: A1)");
+            } else if(!checkIfItemIsValid(position)) {
+                System.out.println("Try again!");
+            } else if(checkIfItemIsValid(position)) {
+                break;
+            }
+        }
+        if(proceedPayment(position)) {
+            System.out.println("Here you go! Have a nice day!");
+            giveItemToUser(position);
         }
     }
 }

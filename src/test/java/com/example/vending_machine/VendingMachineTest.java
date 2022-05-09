@@ -71,4 +71,30 @@ class VendingMachineTest {
     void getNumberOfItems() {
         assertEquals(9, vm.getNumberOfItems());
     }
+
+    @Test
+    void pickItem_everythingAsNeeded() {
+        assertTrue(vm.checkIfItemIsValid("B1"));
+    }
+
+    @Test
+    void pickItem_invalidRow() {
+        assertFalse(vm.checkIfItemIsValid("E1"));
+    }
+
+    @Test
+    void pickItem_invalidColumn() {
+        assertFalse(vm.checkIfItemIsValid("B9"));
+    }
+
+    @Test
+    void pickItem_emptyItem() {
+        assertFalse(vm.checkIfItemIsValid("B6"));
+    }
+
+    @Test
+    void giveItemToUser() {
+        assertTrue(vm.giveItemToUser("B1"));
+        assertEquals(9, vm.getItems().get(1).get(0).getAmount());
+    }
 }
