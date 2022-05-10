@@ -183,7 +183,37 @@ public class VendingMachine {
         }
     }
 
-    private int[] getPositionOfItemFromString(String position) {
+    //Method to generate the html code for a table for the items.
+    public String generateTableToShowItems() {
+        String htmlCode = "";
+        htmlCode += "<table style=\"border-collapse:collapse;border-spacing:0;\"><thead><tr>";
+        char c = 65;
+        int numberOfElements = getNumberOfItems();
+        for(int i = 0; i <= columns; i++) {
+            if(i == 0) {
+                htmlCode += "<th></th>";
+            } else {
+                htmlCode += "<th style=\"border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal\"><span style=\"font-weight:bold\"><span style=\"font-weight:bold\">" + i + "</span></th>";
+            }
+        }
+        htmlCode += "</tr></thead><tbody>";
+        for(int i = 0; i < rows; i++) {
+            htmlCode += "<tr><td style=\"border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal\"><span style=\"font-weight:bold\">" + (char)(c + i) + "</span></th>";
+            for(int j = 0; j < columns; j++) {
+                if(numberOfElements > 0) {
+                    htmlCode += "<td style=\"border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal\"><span style=\"font-weight:bold\">" + items.get(i).get(j) + "</td>";
+                    numberOfElements--;
+                } else {
+                    htmlCode += "<td style=\"border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal\"><span style=\"font-weight:bold\">Empty</td>";
+                }
+            }
+            htmlCode += "</tr>";
+        }
+        htmlCode += "</tbody></table>";
+        return htmlCode;
+    }
+
+    public int[] getPositionOfItemFromString(String position) {
         char[] pos = position.toCharArray();
         //Gets the position of the item for row by transforming the Char to the int
         int chosenRow = pos[0] - 65;
@@ -213,14 +243,30 @@ public class VendingMachine {
         } else if(chosenColumn >= columns) {
             System.out.println("The column is invalid!");
             return false;
-        } else if (chosenRow * 8 + chosenColumn > getNumberOfItems()) {
+        } else if (chosenRow * 8 + chosenColumn + 1 > getNumberOfItems()) {
             System.out.println("The cell has no item!");
             return false;
         }
         return true;
     }
 
-    private boolean proceedPayment(String position) {
+    //Clone of checkIfItemIsValid() but return String not boolean to show the message to the user at the UI
+    protected String checkIfItemIsValidString(String position) {
+        int chosenRow = getPositionOfItemFromString(position)[0];
+        int chosenColumn = getPositionOfItemFromString(position)[1];
+
+        //Checking if the entered data by the user is valid.
+        if(chosenRow >= rows) {
+            return "The row is invalid!";
+        } else if(chosenColumn >= columns) {
+            return "The column is invalid!";
+        } else if (chosenRow * 8 + chosenColumn + 1 > getNumberOfItems()) {
+            return "The cell has no item!";
+        }
+        return "";
+    }
+
+    public boolean proceedPayment(String position) {
         int chosenRow = getPositionOfItemFromString(position)[0];
         int chosenColumn = getPositionOfItemFromString(position)[1];
 
@@ -236,14 +282,18 @@ public class VendingMachine {
         return true;
     }
 
-    protected boolean giveItemToUser(String position) {
+    public boolean giveItemToUser(String position) {
         int chosenRow = getPositionOfItemFromString(position)[0];
         int chosenColumn = getPositionOfItemFromString(position)[1];
 
         items.get(chosenRow).get(chosenColumn).setAmount(items.get(chosenRow).get(chosenColumn).getAmount() - 1);
+        if(items.get(chosenRow).get(chosenColumn).getAmount() <= 0) {
+            items.get(chosenRow).remove(items.get(chosenRow).get(chosenColumn));
+        }
         return true;
     }
 
+    //Method to start the Vending Machine that works from console
     public void startVendingMachine() {
         System.out.println();
         showItems();
@@ -264,5 +314,17 @@ public class VendingMachine {
             System.out.println("Here you go! Have a nice day!");
             giveItemToUser(position);
         }
+    }
+
+    //Clone of startVendingMachine that receives a String position to use for the Vaadin app
+    public String startVendingMachine(String position) {
+        if(!Character.isAlphabetic(getPositionOfItemFromString(position)[0] + 65)) {
+            return "Invalid form of selecting item! (example for writing: A1)";
+        } else if(!checkIfItemIsValid(position)) {
+            return checkIfItemIsValidString(position);
+        } else if(checkIfItemIsValid(position)) {
+            return "";
+        }
+        return checkIfItemIsValidString(position);
     }
 }
