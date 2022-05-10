@@ -2,6 +2,7 @@ package com.example.vaadin.main;
 
 import com.example.vending_machine.VendingMachine;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
@@ -14,7 +15,9 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import elemental.css.CSSStyleDeclaration;
 
+import javax.swing.*;
 import java.io.*;
 
 @PageTitle("Vending Machine")
@@ -86,7 +89,7 @@ public class MainView extends VerticalLayout {
             notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
         });
 
-
+        insertItemToBuyButton.setWidth(120, Unit.PIXELS);
         HorizontalLayout getItem = new HorizontalLayout(insertItemToBuyTextField, insertItemToBuyButton, uploadJsonFile, updateAllVendingMachine, addOrUpdateVendingMachine);
         getItem.setDefaultVerticalComponentAlignment(Alignment.CENTER);
         add(getItem);
@@ -126,6 +129,7 @@ public class MainView extends VerticalLayout {
 
         HorizontalLayout hl = new HorizontalLayout(money, addMoney);
         hl.setDefaultVerticalComponentAlignment(Alignment.END);
+
         //Refreshing the table
         if(numberOfTimesPressedGetItem == 0) {
             remove(html);
