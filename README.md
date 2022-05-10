@@ -5,7 +5,7 @@ This project uses Vaadin framework for a simple, yet informative UI.
 
 
 # How to run? 
-If you are an experienced user, you will sure find a way to run this project, otherwise below are some ways to start the project.
+If you are an experienced user, you will sure find a way to run this project, otherwise below are some ways to start the project. After the project ran and you saw the green mesage "Frontend compiled successfully.", go to your browser and type "localhost/8080" as the URL. 
 
 ## For Intellij Idea
 For Intellij Idea, there are more ways to open the project. You can start Intellij Idea and choose the option "Get from VCS" and insert the URL for this project. The IDE will do everything for you. 
