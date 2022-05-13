@@ -1,6 +1,6 @@
 # Vending Machine
 
-This is a project that is made to imitate the operations of a real vending machine. It can give you items from it, and also you can update it's items or entirely modify it's insides with a .json file. 
+This is a project that is made to imitate the operations of a real vending machine. It can give you items from it, and also you can update it's items or entirely modify it's insides with a .json file (a test file to check the functionallity of update/reset is in the folder FileResources/updateOrAdd.json). 
 This project uses Vaadin framework for a simple, yet informative UI.
 
 
